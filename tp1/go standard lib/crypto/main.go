@@ -21,10 +21,10 @@ func readImgAsByte(fileName string) []byte {
 		log.Fatal(err)
 	}
 	h := sha256.New()
-	h.Write([]byte(content))
+	h.Write(content)
 
 	hAsString := h.Sum(content)
-	fmt.Println(hAsString)
+	fmt.Println(h)
 
 	return hAsString
 }
