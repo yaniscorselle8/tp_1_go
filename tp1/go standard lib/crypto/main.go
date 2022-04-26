@@ -23,13 +23,13 @@ func readImgAsByte(fileName string) []byte {
 	h := sha256.New()
 	h.Write([]byte(content))
 
-	hAsString := h.Sum(nil)
+	hAsString := h.Sum(content)
 	fmt.Println(hAsString)
 
 	return hAsString
 }
 
-func compareHash(hashImage1 []byte, hashImage2 []byte, hashImage3 []byte) {
+func compareHash(hashImage1, hashImage2, hashImage3 []byte) {
 	res1_2 := bytes.Compare(hashImage1, hashImage2)
 
 	if res1_2 == 0 { // 1 et 2 sont pareilles
