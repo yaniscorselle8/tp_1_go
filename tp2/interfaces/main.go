@@ -39,11 +39,11 @@ func PrintIt(input interface{}) {
 	//fmt.Println(input) //show the inputs' value
 	switch input.(type) {
 	case int:
-		fmt.Printf("Value is int")
+		fmt.Println("Value is int")
 	case string:
-		fmt.Printf("Value is string")
+		fmt.Println("Value is string")
 	default:
-		fmt.Printf("I don't know about type")
+		fmt.Println("I don't know about type")
 	}
 }
 

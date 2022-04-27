@@ -66,6 +66,6 @@ func main() {
 		fmt.Println(result)
 	}
 
-	//ttp.HandleFunc("/", ServerHandler(w.Header().Set("Content-Type", "application/json; charset=utf-8"), "http://localhost:8000/?id=id1"))
+	//http.HandleFunc("/", ServerHandler(w.Header().Set("Content-Type", "application/json; charset=utf-8")))
 	http.ListenAndServe("http://localhost:8000/?id=id1", nil)
 }
