@@ -36,6 +36,13 @@ func main() {
 
 	fmt.Println(userMap)
 
+	handler := HandlerInit()
+
+	http.HandleFunc("/", handler)
+	log.Fatal(http.ListenAndServe(":8080", nil))
+}
+
+func HandlerInit() func(w http.ResponseWriter, req *http.Request) {
 	handler := func(w http.ResponseWriter, req *http.Request) {
 		id := req.FormValue("id")
 		fmt.Println(id)
@@ -68,7 +75,5 @@ func main() {
 		)
 
 	}
-
-	http.HandleFunc("/", handler)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	return handler
 }
