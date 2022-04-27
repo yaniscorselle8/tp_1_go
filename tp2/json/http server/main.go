@@ -38,8 +38,11 @@ func main() {
 
 	handler := func(w http.ResponseWriter, req *http.Request) {
 		id := req.FormValue("id")
+		fmt.Println(id)
+		idExist := false
 		for UserID := range userMap {
 			if id == UserID {
+				idExist = true
 				data := map[string]string{
 					"Login":    req.FormValue("Login"),
 					"Password": req.FormValue("Password"),
@@ -54,10 +57,11 @@ func main() {
 
 				content_userMap, _ := json.Marshal(userMap[id])
 				w.Write(content_userMap)
-			} else {
-				w.WriteHeader(http.StatusNotFound)
 			}
 
+		}
+		if idExist == false {
+			w.WriteHeader(http.StatusNotFound)
 		}
 		w.Header().Set("Content-Type",
 			"application/json; charset=utf-8",
