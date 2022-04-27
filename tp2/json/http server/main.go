@@ -29,17 +29,21 @@ func main() {
 		fmt.Println(user)
 	}
 
+	userMapInit(user)
+
+	handler := HandlerInit()
+
+	http.HandleFunc("/", handler)
+	log.Fatal(http.ListenAndServe(":8080", nil))
+}
+
+func userMapInit(user []User) {
 	userMap = make(map[string]User)
 	for i := 0; i < len(user); i++ {
 		userMap[user[i].UserID] = user[i]
 	}
 
 	fmt.Println(userMap)
-
-	handler := HandlerInit()
-
-	http.HandleFunc("/", handler)
-	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 func HandlerInit() func(w http.ResponseWriter, req *http.Request) {
