@@ -44,9 +44,9 @@ func main() {
 			if id == UserID {
 				idExist = true
 				data := map[string]string{
-					"Login":    req.FormValue("Login"),
-					"Password": req.FormValue("Password"),
-					"UserID":   req.FormValue("UserID"),
+					"Login":    userMap[id].Login,
+					"Password": userMap[id].Password,
+					"UserID":   userMap[id].UserID,
 				}
 				user, err := json.MarshalIndent(data, "\n", "")
 				if err != nil {
