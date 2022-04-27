@@ -17,9 +17,6 @@ type Response struct {
 
 func callServer(address string, channel chan Response) {
 	requestResult, err := http.Get(address)
-	//fmt.Println(address)
-	//fmt.Println(requestResult)
-	//fmt.Println(requestResult.StatusCode)
 	var resultErreur Response
 	var resultResponse Response
 	if err != nil {
@@ -39,14 +36,13 @@ func callServer(address string, channel chan Response) {
 		}
 		defer requestResult.Body.Close()
 		resultResponse.respText = string(body)
-		//fmt.Println(resultResponse)
 		go run(channel, resultResponse)
 	}
 
 }
 
 func run(c chan Response, value Response) {
-	c <- value // envoyer une valeur d'un channel
+	c <- value
 }
 
 func main() {

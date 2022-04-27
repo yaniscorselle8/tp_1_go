@@ -36,7 +36,6 @@ func run() error {
 }
 
 func PrintIt(input interface{}) {
-	//fmt.Println(input) //show the inputs' value
 	switch input.(type) {
 	case int:
 		fmt.Println("Value is int")
