@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"os"
 )
 
 type User struct {
-	userName string
+	Login    string `json:"userName"`
 	Password string
+	UserID   string `json:"userID"`
 }
 
 func main() {
@@ -25,18 +25,19 @@ func main() {
 
 	fmt.Println(string(user))
 
-	jsonFile, err := os.Open("users.json")
+	jsonFile, err := ioutil.ReadFile("users.json")
+	jsonvar(err, jsonFile)
+
+}
+
+func jsonvar(err error, jsonFile []byte) (user []User) {
 	if err != nil {
 		fmt.Println(err)
 	} else {
-		defer jsonFile.Close()
 
-		byteValue, _ := ioutil.ReadAll(jsonFile)
+		json.Unmarshal(jsonFile, &user)
 
-		var result map[string]interface{}
-		json.Unmarshal([]byte(byteValue), &result)
-
-		fmt.Println(result)
+		fmt.Println(user)
 	}
-
+	return user
 }
