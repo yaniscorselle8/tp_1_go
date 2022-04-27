@@ -20,6 +20,17 @@ func main() {
 	var user []User
 
 	jsonFile, err := ioutil.ReadFile("users.json")
+	user = jsonvar(err, jsonFile)
+
+	userMapInit(user)
+
+	handler := HandlerInit()
+
+	http.HandleFunc("/", handler)
+	log.Fatal(http.ListenAndServe(":8080", nil))
+}
+
+func jsonvar(err error, jsonFile []byte) (user []User) {
 	if err != nil {
 		fmt.Println(err)
 	} else {
@@ -28,13 +39,7 @@ func main() {
 
 		fmt.Println(user)
 	}
-
-	userMapInit(user)
-
-	handler := HandlerInit()
-
-	http.HandleFunc("/", handler)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	return user
 }
 
 func userMapInit(user []User) {
