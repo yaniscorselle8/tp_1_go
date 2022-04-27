@@ -6,66 +6,65 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 )
 
 type User struct {
-	userID   int
-	userName string
+	Login    string `json:"userName"`
 	Password string
+	UserID   string `json:"userID"`
 }
 
-func ServerHandler(response http.ResponseWriter, request *http.Request) {
-	id := request.FormValue("id")
-	for userID := range user {
-		if id == user[userID] {
-			userName := request.FormValue("userName")
-			Password := request.FormValue("Password")
-			data := map[string]string{
-				"userID":   id,
-				"userName": userName,
-				"Password": Password,
-			}
-			user, err := json.MarshalIndent(data, "\n", "")
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			fmt.Println(string(user))
-
-		}
-	}
-}
-
-var user map[string]string
+var userMap map[string]User
 
 func main() {
-	data := map[string]string{
-		"userID":   "2",
-		"userName": "Paul",
-		"Password": "pass123",
-	}
-	user, err := json.MarshalIndent(data, "\n", "")
-	if err != nil {
-		log.Fatal(err)
-	}
+	var user []User
 
-	fmt.Println(string(user))
-
-	jsonFile, err := os.Open("users.json")
+	jsonFile, err := ioutil.ReadFile("users.json")
 	if err != nil {
 		fmt.Println(err)
 	} else {
-		defer jsonFile.Close()
 
-		byteValue, _ := ioutil.ReadAll(jsonFile)
+		json.Unmarshal(jsonFile, &user)
 
-		var result map[string]interface{}
-		json.Unmarshal([]byte(byteValue), &result)
-
-		fmt.Println(result)
+		fmt.Println(user)
 	}
 
-	//http.HandleFunc("/", ServerHandler(w.Header().Set("Content-Type", "application/json; charset=utf-8")))
-	http.ListenAndServe("http://localhost:8000/?id=id1", nil)
+	userMap = make(map[string]User)
+	for i := 0; i < len(user); i++ {
+		userMap[user[i].UserID] = user[i]
+	}
+
+	fmt.Println(userMap)
+
+	handler := func(w http.ResponseWriter, req *http.Request) {
+		id := req.FormValue("id")
+		for UserID := range userMap {
+			if id == UserID {
+				data := map[string]string{
+					"Login":    req.FormValue("Login"),
+					"Password": req.FormValue("Password"),
+					"UserID":   req.FormValue("UserID"),
+				}
+				user, err := json.MarshalIndent(data, "\n", "")
+				if err != nil {
+					log.Fatal(err)
+				}
+				fmt.Println(string(user))
+				w.WriteHeader(http.StatusOK)
+
+				content_userMap, _ := json.Marshal(userMap[id])
+				w.Write(content_userMap)
+			} else {
+				w.WriteHeader(http.StatusNotFound)
+			}
+
+		}
+		w.Header().Set("Content-Type",
+			"application/json; charset=utf-8",
+		)
+
+	}
+
+	http.HandleFunc("/", handler)
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
