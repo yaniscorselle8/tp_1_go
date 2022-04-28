@@ -57,14 +57,18 @@ func main() {
 
 	go callServer("http://localhost:8080/?id=id1", channel1)
 	go callServer("http://localhost:8080/?id=id42", channel2)
+	SelectFirstDone(channel1, channel2)
+	fmt.Println("Fin du programme")
+
+}
+
+func SelectFirstDone(channel1 chan Response, channel2 chan Response) {
 	select {
 	case msg1 := <-channel1:
 		fmt.Println("received", msg1)
 	case msg2 := <-channel2:
 		fmt.Println("received", msg2)
 	}
-	fmt.Println("Fin du programme")
-
 }
 func maFonction() {
 	fmt.Println("j'ai fini !")
