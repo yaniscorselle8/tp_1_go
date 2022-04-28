@@ -45,13 +45,12 @@ func run(c chan Response, value Response) {
 	c <- value
 }
 
+var wg sync.WaitGroup
+
 func main() {
-	var wg sync.WaitGroup
+
 	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		maFonction()
-	}()
+	go maFonction()
 	wg.Wait()
 	channel1 := make(chan Response)
 	channel2 := make(chan Response)
@@ -69,4 +68,5 @@ func main() {
 }
 func maFonction() {
 	fmt.Println("j'ai fini !")
+	defer wg.Done()
 }
